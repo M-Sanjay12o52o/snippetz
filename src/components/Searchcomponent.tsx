@@ -18,8 +18,16 @@ const Searchcomponent: FC<SearchcomponentProps> = ({}) => {
         </div>
       </div>
       <div className="flex flex-row">
-        <Input className="w-96 rounded-sm mr-4" placeholder="Search Snippets" />
-        <Button>Search</Button>
+        <Input
+          className="w-96 rounded-sm mr-4 focus:border-2 focus:border-blue-500"
+          placeholder="Search Snippets"
+        />
+        <Button
+          className="w-20 border-white border-1 rounded-sm bg-gray-700 hover:bg-gray-800
+        focus:bg-gray-800"
+        >
+          Search
+        </Button>
       </div>
     </div>
   );

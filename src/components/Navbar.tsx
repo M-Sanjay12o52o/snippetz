@@ -28,7 +28,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
         </h1>
         <div className="flex flex-row items-center border border-gray-600 rounded-md overflow-hidden">
           <Input
-            className="bg-gray-700 text-white w-60 h-10 px-3 focus:outline-none focus:ring-0 focus:border-gray-500 border-none rounded-none"
+            className="bg-gray-700 text-white w-60 h-10 px-3 focus:outline-none focus:ring-0 border border-transparent rounded-none focus:border-blue-500 focus:border-2"
             placeholder="Search..."
           />
           <div className="w-10 h-10 flex items-center justify-center bg-gray-700 border-l border-gray-600">
@@ -58,7 +58,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
             </div>
           )}
           <SignedIn>
-            <UserButton appearance={{ elements: { avatarBox: "" } }} />
+            <UserButton />
           </SignedIn>
         </div>
       </div>
