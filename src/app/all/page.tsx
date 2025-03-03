@@ -6,8 +6,8 @@ interface pageProps {}
 
 const page: FC<pageProps> = ({}) => {
   return (
-    <div>
-      <div className="mt-24">
+    <div className="bg-gray-900 text-white min-h-screen">
+      <div className="mt-2">
         <AllSnippets />
       </div>
       <div>

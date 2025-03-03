@@ -8,65 +8,119 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SnippetEditor from "./SnippetEditor";
 
 interface SnippetztextareProps {}
 
 const Snippetztextare: FC<SnippetztextareProps> = ({}) => {
   return (
-    <div className="w-3/4 h-screen pt-28">
-      <Input className="" placeholder="Snippet description" />
+    <div className="w-3/4 h-screen pt-8 bg-gray-900 text-white">
+      {/* Snippet description input */}
+      <Input
+        className="bg-gray-800 text-white border-gray-700 placeholder-gray-400 focus:border-0"
+        placeholder="Snippet description"
+      />
       <br />
-      <div className="border-2 border-gray-500 rounded-md">
-        <div className="flex flex-row justify-between items-center">
+
+      {/* Code input container */}
+      <div className="border-2 border-gray-700 rounded-md bg-gray-800">
+        <div className="flex flex-row justify-between items-center p-2">
+          {/* Filename input */}
           <div className="pl-2 w-[300px]">
             <Input
-              className="rounded-none"
+              className="rounded-md bg-gray-700 text-white placeholder-gray-400 border-gray-600
+              focus:border-0"
               placeholder="Filename including extension..."
             />
           </div>
+
+          {/* Code settings dropdowns */}
           <div className="flex flex-row">
             <div className="p-2">
               <Select>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] bg-gray-700 text-white border-gray-600">
                   <SelectValue placeholder="Indent mode" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="spaces">Spaces</SelectItem>
-                  <SelectItem value="indent">Indent</SelectItem>
+                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                  <SelectItem
+                    className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700"
+                    value="spaces"
+                  >
+                    Spaces
+                  </SelectItem>
+                  <SelectItem
+                    className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700"
+                    value="indent"
+                  >
+                    Indent
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="p-2">
               <Select>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] bg-gray-700 text-white border-gray-600">
                   <SelectValue placeholder="Indent size" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="4">4</SelectItem>
-                  <SelectItem value="6">6</SelectItem>
+                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                  <SelectItem
+                    className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700"
+                    value="2"
+                  >
+                    2
+                  </SelectItem>
+                  <SelectItem
+                    className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700"
+                    value="4"
+                  >
+                    4
+                  </SelectItem>
+                  <SelectItem
+                    className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700"
+                    value="6"
+                  >
+                    6
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="p-2">
               <Select>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] bg-gray-700 text-white border-gray-600">
                   <SelectValue placeholder="Line Wrap mode" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="no-wrap">No wrap</SelectItem>
-                  <SelectItem value="soft-wrap">Soft wrap</SelectItem>
+                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                  <SelectItem
+                    className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700"
+                    value="no-wrap"
+                  >
+                    No wrap
+                  </SelectItem>
+                  <SelectItem
+                    className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700"
+                    value="soft-wrap"
+                  >
+                    Soft wrap
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
         </div>
-        <Input className="h-96 rounded-none" />
+
+        {/* Code editor */}
+        <SnippetEditor />
       </div>
+
+      {/* Action buttons */}
       <div className="flex flex-row justify-between items-center m-4">
-        <Button className="w-40">Add file</Button>
+        <Button className="w-20 bg-blue-600 hover:bg-blue-700 text-white">
+          Add file
+        </Button>
         {/* TODO: Make two options private and public snippets */}
-        <Button className="w-40">Create a snippet</Button>
+        <Button className="w-40 bg-green-600 hover:bg-green-700 text-white">
+          Create a snippet
+        </Button>
       </div>
     </div>
   );
