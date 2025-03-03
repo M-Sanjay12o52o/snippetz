@@ -2,9 +2,9 @@ import { Code2 } from "lucide-react";
 import { FC } from "react";
 import Selecttype from "./Selecttype";
 
-interface AllSnippetsProps {}
+interface AllSnippetsProps { }
 
-const AllSnippets: FC<AllSnippetsProps> = ({}) => {
+const AllSnippets: FC<AllSnippetsProps> = ({ }) => {
   return (
     <div className="flex flex-row items-center justify-between pt-4 bg-gray-900 text-white">
       <div className="flex flex-row items-center p-4 ml-2">
