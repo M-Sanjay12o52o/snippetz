@@ -7,7 +7,7 @@ interface SearchcomponentProps {}
 
 const Searchcomponent: FC<SearchcomponentProps> = ({}) => {
   return (
-    <div className="pt-44 flex flex-col items-center justify-start h-screen">
+    <div className="pt-44 flex flex-col items-center justify-start h-screen bg-gray-900 text-white min-h-screen">
       <div className="flex flex-row items-center mb-4 mr-6">
         <div className="mr-2">
           <SearchIcon />
