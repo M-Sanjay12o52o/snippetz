@@ -45,12 +45,14 @@ const Navbar: FC<NavbarProps> = ({}) => {
         <div className="flex flex-row items-center space-x-2">
           {!isSignedIn && (
             <div className="flex flex-row">
-              <div className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-md mr-4 w-24 text-center">
+              {/* <div className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-md mr-4 w-24 text-center"> */}
+              <div className="px-4 py-2 rounded-md border mr-4 border-black bg-gray-700 hover:bg-gray-600 text-white font-bold text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition-duration-200">
                 <SignedOut>
                   <SignInButton />
                 </SignedOut>
               </div>
-              <div className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-md w-24 text-center">
+              {/* <div className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-md w-24 text-center"> */}
+              <div className="px-4 py-2 rounded-md border border-black bg-gray-700 hover:bg-gray-600 text-white font-bold text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition-duration-200">
                 <SignedOut>
                   <SignUpButton />
                 </SignedOut>
