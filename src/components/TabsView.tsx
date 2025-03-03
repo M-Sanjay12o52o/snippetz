@@ -6,7 +6,7 @@ interface TabsViewProps {}
 const TabsView: FC<TabsViewProps> = ({}) => {
   return (
     <div className="mx-4">
-      <Tabs defaultValue="account" className="w-[400px]">
+      <Tabs defaultValue="all" className="w-[400px]">
         <TabsList>
           <TabsTrigger className="w-28" value="all">
             All snippets
