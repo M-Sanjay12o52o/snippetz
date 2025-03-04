@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import SnippetsDisplay from "./SnippetsDisplay";
+import ForkedSnippetsDisplay from "./ForkedSnippetsDisplay";
+import StarredSnippetsDisplay from "./StarredSnippetsDisplay";
 
 interface TabsViewProps { }
 
@@ -33,10 +35,10 @@ const TabsView: FC<TabsViewProps> = ({ }) => {
           <SnippetsDisplay />
         </TabsContent>
         <TabsContent className="mt-4 pl-4" value="forked">
-          <p className="text-gray-300">These are the forked snippets.</p>
+          <ForkedSnippetsDisplay />
         </TabsContent>
         <TabsContent className="mt-4 pl-4" value="starred">
-          <p className="text-gray-300">Your starred snippets appear here.</p>
+          <StarredSnippetsDisplay />
         </TabsContent>
       </Tabs>
     </div>

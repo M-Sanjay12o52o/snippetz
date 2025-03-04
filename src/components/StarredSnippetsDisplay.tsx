@@ -15,21 +15,45 @@ interface Snippet {
     userId: string;
 }
 
-interface SnippetsDisplayProps { }
+interface StarredSnippetsDisplayProps { }
 
-const SnippetsDisplay: FC<SnippetsDisplayProps> = () => {
+const StarredSnippetsDisplay: FC<StarredSnippetsDisplayProps> = () => {
+    const { userId } = useAuth();
     const [snippets, setSnippets] = useState<Snippet[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [userid, setUserid] = useState<number | null>(null);
 
-    console.log("SnippetsDisplay snippets: ", snippets);
+    console.log("snippets Starredsnippetsdisplay: ", snippets);
 
     useEffect(() => {
+        const fetchUserId = async () => {
+            if (userId === null) return;
+
+            try {
+                const response = await fetch(`/api/get-userId?userId=${userId}`);
+                if (!response.ok) throw new Error("Failed to fetch userId");
+
+                const data = await response.json();
+                setUserid(data.userId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchUserId();
+    }, [userid]);
+
+    useEffect(() => {
+        if (userid === null) return;
+
         async function fetchSnippets() {
             try {
-                const res = await fetch("/api/get-snippets");
+                const res = await fetch(`/api/get-starred?userId=${userid}`);
                 if (!res.ok) throw new Error("Failed to fetch snippets");
                 const data = await res.json();
-                setSnippets(data);
+                console.log("api/get-starred frontend result: ", data);
+                // setSnippets(data);
+                setSnippets(data.map((item: any) => item.snippet));
             } catch (error) {
                 console.error(error);
             } finally {
@@ -37,7 +61,7 @@ const SnippetsDisplay: FC<SnippetsDisplayProps> = () => {
             }
         }
         fetchSnippets();
-    }, []);
+    }, [userid]);
 
     if (loading) {
         return (
@@ -146,7 +170,7 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     }, [userId]);
 
     // Split code into lines for line numbering
-    const codeLines = snippet.code.split('\n');
+    const codeLines = snippet?.code ? snippet.code.split('\n') : []; // ✅ Ensures it's defined
 
     return (
         <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden shadow-lg">
@@ -241,4 +265,4 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     );
 };
 
-export default SnippetsDisplay;
+export default StarredSnippetsDisplay;

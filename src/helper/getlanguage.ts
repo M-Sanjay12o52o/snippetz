@@ -1,5 +1,5 @@
 export const getLanguageFromFilename = (filename: string): string => {
-    const extension = filename.split('.').pop()?.toLowerCase();
+    const extension = filename !== undefined && filename.split('.').pop()?.toLowerCase();
 
     const languageMap: { [key: string]: string } = {
         js: "javascript",

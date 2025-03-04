@@ -5,6 +5,8 @@ export async function GET(request: Request) {
         const { searchParams } = new URL(request.url);
         const userId = searchParams.get("userId");
 
+        console.log("api/get-forked: ", userId)
+
         if (!userId) {
             return Response.json({ error: "User ID is required" }, { status: 400 });
         }
@@ -19,6 +21,7 @@ export async function GET(request: Request) {
                 }
             }
         );
+
         return Response.json(forkedSnippets, { status: 200 });
     } catch (error) {
         return Response.json({ error: 'Failed to fetch forked snippets' }, { status: 500 })
