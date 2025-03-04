@@ -1,17 +1,26 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../db/index';
 
-export async function POST(req: NextRequest) {
-    const { userId } = await req.json();
-
+export async function GET(req: NextRequest) {
     try {
-        const userid = await prisma.user.findFirst({
+        const userId = req.nextUrl.searchParams.get('userId');
+
+        console.log("api/get-userId userId: ", userId)
+
+        if (!userId) {
+            return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+        }
+
+        const user = await prisma.user.findFirst({
             where: {
                 clerkId: userId
-            }
+            },
+            select: { id: true },
         })
-        return Response.json(userid, { status: 200 });
+
+        return NextResponse.json({ userId: user!.id }, { status: 200 });
     } catch (error) {
-        return Response.json({ error: 'Failed to fetch snippets' }, { status: 500 })
+        console.error("Error fetching userId:", error);
+        return NextResponse.json({ error: 'Failed to fetch userId' }, { status: 500 })
     }
 }

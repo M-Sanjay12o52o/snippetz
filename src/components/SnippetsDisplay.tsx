@@ -5,7 +5,7 @@ import { FC, useEffect, useId, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Button } from "./ui/button";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useClerk } from "@clerk/nextjs";
 
 interface Snippet {
     id: string;
@@ -73,6 +73,8 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     const { userId } = useAuth();
     const [userid, setUserid] = useState<number | null>(null);
 
+    console.log("SnippetCard : ", userid);
+
     const handleStarring = (snippetId: number) => {
         fetch("/api/star", {
             method: "POST",
@@ -106,7 +108,7 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const response = await fetch("api/get-userId");
+                const response = await fetch(`/api/get-userId?userId=${userId}`);
                 if (!response.ok) throw new Error("Failed to fetch userId");
 
                 const data = await response.json();
@@ -117,7 +119,7 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
         };
 
         fetchUserId();
-    }, []);
+    }, [userId]);
 
     // Split code into lines for line numbering
     const codeLines = snippet.code.split('\n');

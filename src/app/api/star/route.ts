@@ -3,15 +3,17 @@ import { prisma } from "@/db";
 export async function POST(req: Request, res: Response) {
     try {
         const body = await req.json();
-        const { userId, snippetId } = body;
+        const { userid, snippetId } = body;
 
-        if (!userId || !snippetId) {
+        console.log("api/star: ", "userId: ", userid, "snippetId: ", snippetId);
+
+        if (!userid || !snippetId) {
             return Response.json({ error: "User ID and Snipped ID are required." }, { status: 400 });
         }
 
         const starredSnippet = await prisma.starredSnippets.create({
             data: {
-                userId: parseInt(userId),
+                userId: parseInt(userid),
                 snippetId: parseInt(snippetId)
             },
         });

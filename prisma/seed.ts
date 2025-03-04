@@ -9,7 +9,6 @@ async function main() {
     await seedStarredSnippets();
     await seedComments();
 
-    console.log('Seeding completed successfully!');
   } catch (error) {
     console.error('Seeding failed: ', error);
   } finally {
@@ -29,7 +28,6 @@ async function seedUses() {
       { email: 'user5@example.com', name: 'User five', clerkId: 'clerk1213' },
     ],
   });
-  console.log('Users seeded');
 }
 
 // Seed Profiles
@@ -40,7 +38,6 @@ async function seedProfiles() {
       userId: user.id,
     })),
   });
-  console.log("Profiles seeded");
 }
 
 // Seed Snippets
@@ -110,7 +107,6 @@ async function seedSnippets() {
       }
     ]),
   });
-  console.log('Snippets seeded');
 }
 
 // Seed Forked Snippets
@@ -125,7 +121,6 @@ async function seedForkedSnippets() {
       snippetId: snippets[0].id,
     })),
   });
-  console.log('Forked Snippets seeded.');
 }
 
 // Seed Starred Snippets
@@ -140,7 +135,6 @@ async function seedStarredSnippets() {
       snippetId: snippets[0].id,
     })),
   });
-  console.log('Starred Snippets seeded.');
 }
 
 // Seed comments
@@ -154,7 +148,6 @@ async function seedComments() {
       snippetId: snippet.id,
     })),
   });
-  console.log('Comments seeded');
 }
 
 main();

@@ -16,28 +16,26 @@ import { useAuth } from "@clerk/nextjs";
 interface SnippetztextareProps { }
 
 const Snippetztextare: FC<SnippetztextareProps> = ({ }) => {
-  const { isLoaded, isSignedIn, userId, sessionId, getToken } = useAuth()
+  const { isSignedIn, userId, getToken } = useAuth()
   const [snippet, setSnippet] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [userid, setuserid] = useState<number | null>(null);
 
+  // console.log("clerk Id: ", userId)
+  console.log("isSignedIn: ", isSignedIn, "userId: ", userId, "getToken: ", getToken);
+
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const response = await fetch("/api/get-userId", {
-          method: "POST", // Use POST if your backend expects data in the body
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId }), // Pass userId in the body
-        });
+        const response = await fetch(`/api/get-userId?userId=${userId}`);
 
         if (!response.ok) {
-          throw new Error("Failed to fetch userId");
+          throw new Error("Failed to fetch userid");
         }
 
         const data = await response.json();
+
         setuserid(data.userId);
       } catch (error) {
         console.error("Error fetching userId:", error);
@@ -47,7 +45,7 @@ const Snippetztextare: FC<SnippetztextareProps> = ({ }) => {
     if (userId) {
       fetchUserId();
     }
-  }, [userid]);
+  }, []);
 
   const sendSnippet = async () => {
     if (!isSignedIn || !userId) {
