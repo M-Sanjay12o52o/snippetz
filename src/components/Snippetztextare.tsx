@@ -22,8 +22,12 @@ const Snippetztextare: FC<SnippetztextareProps> = ({ }) => {
   const [description, setDescription] = useState<string>('');
   const [userid, setuserid] = useState<number | null>(null);
 
+  console.log("snippettextarea userid: ", userid);
+
   useEffect(() => {
     const fetchUserId = async () => {
+      if (!userId) return;
+
       try {
         const response = await fetch(`/api/get-userId?userId=${userId}`);
 
@@ -39,16 +43,16 @@ const Snippetztextare: FC<SnippetztextareProps> = ({ }) => {
       }
     };
 
-    if (userId) {
-      fetchUserId();
-    }
-  }, []);
+    fetchUserId();
+  }, [userId]);
 
   const sendSnippet = async () => {
     if (!isSignedIn || !userId) {
       console.error("User not signed in.");
       return;
     }
+
+    if (!userid) return;
 
     try {
       const response = await fetch("/api/post-snippet", {
@@ -60,7 +64,7 @@ const Snippetztextare: FC<SnippetztextareProps> = ({ }) => {
           filename: fileName,
           description,
           code: snippet,
-          userId,
+          userid,
         }),
       });
 
