@@ -1,9 +1,11 @@
 "use client"
 
 import { getLanguageFromFilename } from "@/helper/getlanguage";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useId, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Button } from "./ui/button";
+import { useAuth } from "@clerk/nextjs";
 
 interface Snippet {
     id: string;
@@ -68,6 +70,29 @@ const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
 };
 
 const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
+    const { userId } = useAuth();
+    const [userid, setUserid] = useState<number | null>(null);
+
+    const handleStarring = (snippetId: number) => {
+        fetch("/api/star", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                snippetId,
+                userid,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
+
     const copyToClipboard = () => {
         navigator.clipboard.writeText(snippet.code)
             .then(() => {
@@ -77,6 +102,22 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
                 console.error("Failed to copy code", error);
             });
     };
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const response = await fetch("api/get-userId");
+                if (!response.ok) throw new Error("Failed to fetch userId");
+
+                const data = await response.json();
+                setUserid(data.userId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchUserId();
+    }, []);
 
     // Split code into lines for line numbering
     const codeLines = snippet.code.split('\n');
@@ -116,7 +157,9 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
                             <path fillRule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"></path>
                         </svg>
-                        0 stars
+                        <span onClick={() => handleStarring(parseInt(snippet.id))}>
+                            0 stars
+                        </span>
                     </span>
                 </div>
             </div>

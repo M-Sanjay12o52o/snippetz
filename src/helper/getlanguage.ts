@@ -24,7 +24,7 @@ export const getLanguageFromFilename = (filename: string): string => {
         yml: "yaml",
         xml: "xml",
         sql: "sql",
-        md: "markdown",
+        md: "markdown"
     };
 
     return extension && languageMap[extension] ? languageMap[extension] : "plaintext";

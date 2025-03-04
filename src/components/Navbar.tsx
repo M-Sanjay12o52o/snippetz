@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Input } from "./ui/input";
-import { SearchIcon } from "lucide-react";
+import { Plus, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import {
   SignedIn,
@@ -12,10 +12,11 @@ import {
   UserButton,
   useUser,
 } from "@clerk/nextjs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-interface NavbarProps {}
+interface NavbarProps { }
 
-const Navbar: FC<NavbarProps> = ({}) => {
+const Navbar: FC<NavbarProps> = ({ }) => {
   const { isSignedIn } = useUser();
 
   return (
@@ -59,6 +60,14 @@ const Navbar: FC<NavbarProps> = ({}) => {
               </div>
             </div>
           )}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href={"/"}>
+                <Plus className="cursor-pointer mr-2" />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent> Create a new Snippet </TooltipContent>
+          </Tooltip>
           <SignedIn>
             <UserButton />
           </SignedIn>

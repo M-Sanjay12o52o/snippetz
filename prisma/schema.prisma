@@ -11,12 +11,13 @@ model User {
   id        Int               @id @default(autoincrement())
   email     String            @unique
   name      String?
+  password  String?
   profile   Profile?
   clerkId   String?           @unique
-  createdAt DateTime          @default(now())  // Fixed typo
+  createdAt DateTime          @default(now()) // Fixed typo
   updatedAt DateTime          @updatedAt
-  snippets  Snippets[]        // One-to-many relation (User → Snippet)
-  forks     ForkedSnippets[]  // One-to-many relation (User → ForkedSnippet)
+  snippets  Snippet[] // One-to-many relation (User → Snippet)
+  forks     ForkedSnippets[] // One-to-many relation (User → ForkedSnippet)
   stars     StarredSnippets[] // One-to-many relation (User → StarredSnippet)
 }
 
@@ -26,37 +27,37 @@ model Profile {
   userId Int  @unique
 }
 
-model Snippets {
+model Snippet {
   id          Int               @id @default(autoincrement())
   filename    String
   description String
   code        String
   userId      Int
   user        User              @relation(fields: [userId], references: [id])
-  comments    Comment[]         // One-to-many relation (Snippet → Comment)
-  forks       ForkedSnippets[]  // One-to-many relation (Snippet → ForkedSnippet)
+  comments    Comment[] // One-to-many relation (Snippet → Comment)
+  forks       ForkedSnippets[] // One-to-many relation (Snippet → ForkedSnippet)
   stars       StarredSnippets[] // One-to-many relation (Snippet → StarredSnippet)
 }
 
 model ForkedSnippets {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
   snippetId Int
-  snippet   Snippets @relation(fields: [snippetId], references: [id])
+  snippet   Snippet @relation(fields: [snippetId], references: [id])
 }
 
 model StarredSnippets {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
   snippetId Int
-  snippet   Snippets @relation(fields: [snippetId], references: [id])
+  snippet   Snippet @relation(fields: [snippetId], references: [id])
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   message   String
   snippetId Int
-  snippet   Snippets @relation(fields: [snippetId], references: [id])
+  snippet   Snippet @relation(fields: [snippetId], references: [id])
 }

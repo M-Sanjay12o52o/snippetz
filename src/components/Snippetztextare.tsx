@@ -1,4 +1,6 @@
-import { FC } from "react";
+"use client";
+
+import { FC, useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import {
@@ -9,14 +11,89 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SnippetEditor from "./SnippetEditor";
+import { useAuth } from "@clerk/nextjs";
 
-interface SnippetztextareProps {}
+interface SnippetztextareProps { }
 
-const Snippetztextare: FC<SnippetztextareProps> = ({}) => {
+const Snippetztextare: FC<SnippetztextareProps> = ({ }) => {
+  const { isLoaded, isSignedIn, userId, sessionId, getToken } = useAuth()
+  const [snippet, setSnippet] = useState<string>('');
+  const [fileName, setFileName] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [userid, setuserid] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const response = await fetch("/api/get-userId", {
+          method: "POST", // Use POST if your backend expects data in the body
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }), // Pass userId in the body
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch userId");
+        }
+
+        const data = await response.json();
+        setuserid(data.userId);
+      } catch (error) {
+        console.error("Error fetching userId:", error);
+      }
+    };
+
+    if (userId) {
+      fetchUserId();
+    }
+  }, [userid]);
+
+  const sendSnippet = async () => {
+    if (!isSignedIn || !userId) {
+      console.error("User not signed in.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/post-snippet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          filename: fileName,
+          description,
+          code: snippet,
+          userId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send snippet");
+      }
+
+      console.log("Snippet sent successfully!");
+    } catch (error) {
+      console.error("Error sending snippet: ", error);
+    }
+  };
+
+
+  const handleFileName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFileName(e.target.value);
+  }
+
+  const handleDescripton = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(e.target.value);
+  }
+
   return (
     <div className="w-3/4 h-screen pt-8 bg-gray-900 text-white">
       {/* Snippet description input */}
       <Input
+        value={description}
+        onChange={(e) => handleDescripton(e)}
         className="bg-gray-800 text-white border-gray-700 placeholder-gray-400 focus:border-0"
         placeholder="Snippet description"
       />
@@ -30,6 +107,8 @@ const Snippetztextare: FC<SnippetztextareProps> = ({}) => {
             <Input
               className="rounded-md bg-gray-700 text-white placeholder-gray-400 border-gray-600
               focus:border-0"
+              value={fileName}
+              onChange={(e) => handleFileName(e)}
               placeholder="Filename including extension..."
             />
           </div>
@@ -109,7 +188,7 @@ const Snippetztextare: FC<SnippetztextareProps> = ({}) => {
         </div>
 
         {/* Code editor */}
-        <SnippetEditor />
+        <SnippetEditor fileName={fileName} snippet={snippet} setSnippet={setSnippet} />
       </div>
 
       {/* Action buttons */}
@@ -118,7 +197,7 @@ const Snippetztextare: FC<SnippetztextareProps> = ({}) => {
           Add file
         </Button>
         {/* TODO: Make two options private and public snippets */}
-        <Button className="w-40 bg-green-600 hover:bg-green-700 text-white">
+        <Button onClick={() => sendSnippet()} className="w-40 bg-green-600 hover:bg-green-700 text-white">
           Create a snippet
         </Button>
       </div>

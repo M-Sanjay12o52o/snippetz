@@ -1,14 +1,13 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { prisma } from "../src/db/index";
 
 async function main() {
   try {
-    // await seedUses();
-    // await seedProfiles();
+    await seedUses();
+    await seedProfiles();
     await seedSnippets();
-    // await seedForkedSnippets();
-    // await seedStarredSnippets();
-    // await seedComments();
+    await seedForkedSnippets();
+    await seedStarredSnippets();
+    await seedComments();
 
     console.log('Seeding completed successfully!');
   } catch (error) {
@@ -45,10 +44,9 @@ async function seedProfiles() {
 }
 
 // Seed Snippets
-// Seed Snippets
 async function seedSnippets() {
   const users = await prisma.user.findMany();
-  await prisma.snippets.createMany({
+  await prisma.snippet.createMany({
     data: users.flatMap(user => [
       {
         filename: `snippet_${user.id}.js`,
@@ -118,7 +116,7 @@ async function seedSnippets() {
 // Seed Forked Snippets
 async function seedForkedSnippets() {
   const users = await prisma.user.findMany();
-  const snippets = await prisma.snippets.findMany();
+  const snippets = await prisma.snippet.findMany();
   if (!snippets.length) return;
 
   await prisma.forkedSnippets.createMany({
@@ -133,7 +131,7 @@ async function seedForkedSnippets() {
 // Seed Starred Snippets
 async function seedStarredSnippets() {
   const users = await prisma.user.findMany();
-  const snippets = await prisma.snippets.findMany();
+  const snippets = await prisma.snippet.findMany();
   if (!snippets.length) return;
 
   await prisma.starredSnippets.createMany({
@@ -147,7 +145,7 @@ async function seedStarredSnippets() {
 
 // Seed comments
 async function seedComments() {
-  const snippets = await prisma.snippets.findMany();
+  const snippets = await prisma.snippet.findMany();
   if (!snippets.length) return;
 
   await prisma.comment.createMany({
