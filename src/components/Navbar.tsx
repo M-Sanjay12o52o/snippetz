@@ -38,8 +38,11 @@ const Navbar: FC<NavbarProps> = ({ }) => {
             </Link>
           </div>
         </div>
-        <Link href={"/all"} className="text-xl hover:text-gray-300 ml-4">
+        <Link href={"/all"} className="text-xl hover:text-gray-300 ml-4 mr-4">
           All snippets
+        </Link>
+        <Link href={"/your-snippets"} className="text-xl hover:text-gray-300 ml-4">
+          Your snippets
         </Link>
       </div>
       <div className="flex flex-row items-center mr-4">

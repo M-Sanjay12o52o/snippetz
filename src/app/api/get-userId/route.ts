@@ -5,8 +5,6 @@ export async function GET(req: NextRequest) {
     try {
         const userId = req.nextUrl.searchParams.get('userId');
 
-        console.log("api/get-userId userId: ", userId)
-
         if (!userId) {
             return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
         }

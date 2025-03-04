@@ -5,8 +5,6 @@ export async function POST(req: Request, res: Response) {
         const body = await req.json();
         const { userid, snippetId } = body;
 
-        console.log("api/fork: ", "userid: ", userid, "snippetId: ", snippetId)
-
         if (!userid || !snippetId) {
             return Response.json({ error: "User ID and Snipped ID are required." }, { status: 400 });
         }

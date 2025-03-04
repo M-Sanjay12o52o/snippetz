@@ -5,8 +5,6 @@ export async function GET(request: Request) {
         const { searchParams } = new URL(request.url);
         const userId = searchParams.get("userId");
 
-        console.log("api/get-forked: ", userId)
-
         if (!userId) {
             return Response.json({ error: "User ID is required" }, { status: 400 });
         }

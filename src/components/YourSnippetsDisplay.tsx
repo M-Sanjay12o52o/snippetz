@@ -15,41 +15,19 @@ interface Snippet {
     userId: string;
 }
 
-interface ForkedSnippetsDisplayProps { }
+interface YourSnippetsDisplayProps { }
 
-const ForkedSnippetsDisplay: FC<ForkedSnippetsDisplayProps> = () => {
-    const { userId } = useAuth();
+const YourSnippetsDisplay: FC<YourSnippetsDisplayProps> = () => {
     const [snippets, setSnippets] = useState<Snippet[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [userid, setUserid] = useState<number | null>(null);
 
     useEffect(() => {
-        const fetchUserId = async () => {
-            if (!userId) return;
-
-            try {
-                const response = await fetch(`/api/get-userId?userId=${userId}`);
-                if (!response.ok) throw new Error("Failed to fetch userId");
-
-                const data = await response.json();
-                setUserid(data.userId);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchUserId();
-    }, [userId]);
-
-    useEffect(() => {
-        if (userid === null) return;
-
         async function fetchSnippets() {
             try {
-                const res = await fetch(`/api/get-forked?userId=${userid}`);
+                const res = await fetch("/api/get-snippets");
                 if (!res.ok) throw new Error("Failed to fetch snippets");
                 const data = await res.json();
-                setSnippets(data.map((item: any) => item.snippet));
+                setSnippets(data);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -57,7 +35,7 @@ const ForkedSnippetsDisplay: FC<ForkedSnippetsDisplayProps> = () => {
             }
         }
         fetchSnippets();
-    }, [userid]);
+    }, []);
 
     if (loading) {
         return (
@@ -81,7 +59,7 @@ const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
 
     return (
         <div className="flex flex-col gap-6">
-            <h2 className="text-gray-200 text-xl font-bold">Your Code Snippets</h2>
+            <h2 className="text-gray-200 text-xl font-bold mt-8">Your Snippets</h2>
             <div className="grid grid-cols-1 gap-6">
                 {snippets.map((snippet) => (
                     <SnippetCard key={snippet.id} snippet={snippet} />
@@ -171,7 +149,7 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     }, [userId]);
 
     // Split code into lines for line numbering
-    const codeLines = snippet?.code ? snippet.code.split('\n') : [];
+    const codeLines = snippet.code.split('\n');
 
     return (
         <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden shadow-lg">
@@ -268,4 +246,4 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     );
 };
 
-export default ForkedSnippetsDisplay;
+export default YourSnippetsDisplay;

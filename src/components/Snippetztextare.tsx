@@ -22,9 +22,6 @@ const Snippetztextare: FC<SnippetztextareProps> = ({ }) => {
   const [description, setDescription] = useState<string>('');
   const [userid, setuserid] = useState<number | null>(null);
 
-  // console.log("clerk Id: ", userId)
-  console.log("isSignedIn: ", isSignedIn, "userId: ", userId, "getToken: ", getToken);
-
   useEffect(() => {
     const fetchUserId = async () => {
       try {

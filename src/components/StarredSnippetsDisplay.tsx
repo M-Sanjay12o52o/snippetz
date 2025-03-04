@@ -23,8 +23,6 @@ const StarredSnippetsDisplay: FC<StarredSnippetsDisplayProps> = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [userid, setUserid] = useState<number | null>(null);
 
-    console.log("snippets Starredsnippetsdisplay: ", snippets);
-
     useEffect(() => {
         const fetchUserId = async () => {
             if (userId === null) return;
@@ -51,7 +49,6 @@ const StarredSnippetsDisplay: FC<StarredSnippetsDisplayProps> = () => {
                 const res = await fetch(`/api/get-starred?userId=${userid}`);
                 if (!res.ok) throw new Error("Failed to fetch snippets");
                 const data = await res.json();
-                console.log("api/get-starred frontend result: ", data);
                 // setSnippets(data);
                 setSnippets(data.map((item: any) => item.snippet));
             } catch (error) {
@@ -87,8 +84,9 @@ const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
         <div className="flex flex-col gap-6">
             <h2 className="text-gray-200 text-xl font-bold">Your Code Snippets</h2>
             <div className="grid grid-cols-1 gap-6">
-                {snippets.map((snippet) => (
-                    <SnippetCard key={snippet.id} snippet={snippet} />
+                {snippets.map((snippet, index) => (
+                    // <SnippetCard key={snippet.id} snippet={snippet} />
+                    <SnippetCard key={index} snippet={snippet} />
                 ))}
             </div>
         </div>
@@ -98,8 +96,7 @@ const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
 const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     const { userId, isSignedIn } = useAuth();
     const [userid, setUserid] = useState<number | null>(null);
-
-    console.log("SnippetCard : ", userid);
+    const [copied, setCopied] = useState(false);
 
     const handleStarring = (snippetId: number) => {
         fetch("/api/star", {
@@ -142,13 +139,19 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     }
 
     const copyToClipboard = () => {
+        setCopied(true);
         navigator.clipboard.writeText(snippet.code)
             .then(() => {
                 console.log("Code copied to clipboard");
             })
             .catch((error) => {
                 console.error("Failed to copy code", error);
-            });
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    setCopied(false);
+                }, 1500)
+            })
     };
 
     useEffect(() => {
@@ -190,12 +193,6 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
                             <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                         </svg>
                         1 file
-                    </span>
-                    <span className="text-gray-400 text-xs flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clipRule="evenodd" />
-                        </svg>
-                        0 comments
                     </span>
                     <span className="text-gray-400 text-xs flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
@@ -249,17 +246,26 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
             </div>
 
             {/* Footer with actions */}
-            <div className="p-2 bg-gray-900 border-t border-gray-700 flex justify-end">
+            <div className="p-2 bg-gray-900 border-t border-gray-700 flex justify-between">
+                <span className="text-gray-400 text-xs flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clipRule="evenodd" />
+                    </svg>
+                    0 comments
+                </span>
                 <button
                     onClick={copyToClipboard}
-                    className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1 rounded-md transition-colors flex items-center gap-1"
+                    // className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1 rounded-md transition-colors flex items-center gap-1"
+                    className={`text-xs px-3 py-1 rounded-md transition-all flex items-center gap-1 ${copied ? "bg-green-600 text-white" : "bg-gray-800 hover:bg-gray-700 text-gray-300"
+                        }`}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
                         <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
                     </svg>
-                    Copy
+                    {copied ? "Copied!" : "Copy"}
                 </button>
+
             </div>
         </div>
     );
